@@ -1,18 +1,16 @@
 package ch07.template_method;
 
-public class DbAuthenticator {
+public class DbAuthenticator extends Authenticator {
 
-    public Auth authenticate(String id, String pw) {
+    @Override
+    protected boolean doAuthenticate(String id, String pw) {
         User user userDao.selectById(id);
-        boolean auth = user.equalPassword(pw);
-        if (!auth) {
-            throw createException();
-        }
+        return user.equalPassword(pw);
+    }
 
+    @Override
+    protected Auth createAuth(String id) {
         return new Auth(id, user.getName());
     }
 
-    private RuntimeException createException() {
-        return new RuntimeException();
-    }
 }
