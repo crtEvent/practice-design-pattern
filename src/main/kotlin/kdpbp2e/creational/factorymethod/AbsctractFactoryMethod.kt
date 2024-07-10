@@ -3,7 +3,7 @@ package kdpbp2e.creational.factorymethod
 import java.lang.RuntimeException
 
 fun main() {
-    val properties = server(listOf("port: 8080", "environment: prod"))
+    val properties = Parser.server(listOf("port: 8080", "environment: prod"))
     println(properties)
     // 출력:
     // ServerConfigurationImpl(
@@ -12,21 +12,27 @@ fun main() {
     //     StringProperty(name=environment, value=prod)])
 }
 
-fun server(propertyStrings: List<String>): ServerConfiguration {
-    val parsedProperties = mutableListOf<Property>()
-    for (p in propertyStrings) {
-        parsedProperties += property(p)
-    }
+class Parser {
 
-    return ServerConfigurationImpl(parsedProperties)
-}
+    companion object {
+        fun server(propertyStrings: List<String>): ServerConfiguration {
+            val parsedProperties = mutableListOf<Property>()
+            for (p in propertyStrings) {
+                parsedProperties += property(p)
+            }
 
-fun property(prop: String): Property {
-    val (name, value) = prop.split(":")
-    return when (name) {
-        "port" -> IntProperty(name, value.trim().toInt())
-        "environment" -> StringProperty(name, value.trim())
-        else -> throw RuntimeException("Unknown property: $name")
+            return ServerConfigurationImpl(parsedProperties)
+        }
+
+        fun property(prop: String): Property {
+            val (name, value) = prop.split(":")
+
+            return when (name) {
+                "port" -> IntProperty(name, value.trim().toInt())
+                "environment" -> StringProperty(name, value.trim())
+                else -> throw RuntimeException("Unknown property: $name")
+            }
+        }
     }
 }
 
