@@ -3,24 +3,29 @@ package kdpbp2e.creational.factorymethod
 import java.lang.RuntimeException
 
 fun main() {
-    val port = property("port: 8080")
-    val environment = property("environment: prod")
+    val properties = server(listOf("port: 8080", "environment: prod"))
+    println(properties)
+    // 출력:
+    // ServerConfigurationImpl(
+    //   properties=[
+    //     IntProperty(name=port, value=8080),
+    //     StringProperty(name=environment, value=prod)])
+}
 
-    // 문제: port를 Int 타입으로 저장했으나 Property.value는 Any 타입이다.
-    val newPort: Any = port.value
+fun server(propertyStrings: List<String>): ServerConfiguration {
+    val parsedProperties = mutableListOf<Property>()
+    for (p in propertyStrings) {
+        parsedProperties += property(p)
+    }
 
-    // as Int로 캐스팅 할 수 있지만. 캐스팅 되지 않는 경우 프로그램이 종료된다
-    val newPort2: Int = port.value as Int
-
-    // 안전한 캐스팅을 할 수 있지만. 캐스팅 되지 않는 경우 null이 반환된다
-    val newPort3: Int? = port.value as? Int
+    return ServerConfigurationImpl(parsedProperties)
 }
 
 fun property(prop: String): Property {
     val (name, value) = prop.split(":")
     return when (name) {
-        "port" -> PropertyImpl(name, value.trim().toInt())
-        "environment" -> PropertyImpl(name, value.trim())
+        "port" -> IntProperty(name, value.trim().toInt())
+        "environment" -> StringProperty(name, value.trim())
         else -> throw RuntimeException("Unknown property: $name")
     }
 }
@@ -34,9 +39,14 @@ interface ServerConfiguration {
     val properties: List<Property>
 }
 
-data class PropertyImpl(
+data class IntProperty(
     override val name: String,
-    override val value: Any,
+    override val value: Int,
+): Property
+
+data class StringProperty(
+    override val name: String,
+    override val value: String,
 ): Property
 
 data class ServerConfigurationImpl(
