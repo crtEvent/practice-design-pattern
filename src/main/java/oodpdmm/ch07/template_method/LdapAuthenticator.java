@@ -1,8 +1,11 @@
-package ch07.template_method;
+package oodpdmm.ch07.template_method;
 
-import javax.naming.ldap.LdapContext;
+import oodpdmm.ch07.template_method.garbage.LdapClient;
+import oodpdmm.ch07.template_method.garbage.LdapContext;
 
 public class LdapAuthenticator extends Authenticator {
+
+    private LdapClient ldapClient;
 
     @Override
     protected boolean doAuthenticate(String id, String pw) {

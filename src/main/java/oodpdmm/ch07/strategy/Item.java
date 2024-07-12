@@ -1,4 +1,4 @@
-package ch07.strategy;
+package oodpdmm.ch07.strategy;
 
 public class Item {
     private int price;

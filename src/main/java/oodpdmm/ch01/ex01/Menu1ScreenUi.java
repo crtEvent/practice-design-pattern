@@ -1,4 +1,4 @@
-package ch01.ex01;
+package oodpdmm.ch01.ex01;
 
 public class Menu1ScreenUi implements ScreenUi {
 

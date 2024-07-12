@@ -1,4 +1,4 @@
-package ch07.template_method;
+package oodpdmm.ch07.template_method;
 
 public abstract class Authenticator {
 
