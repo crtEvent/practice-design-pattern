@@ -46,11 +46,27 @@ fun charge(plug: PlugTypeA): UsbMini {
     }
 }
 
+// 4. F 타입 콘센트에 A 타입 플러그를 사용할 수 있게 확장함수 구현하기
+fun PlugTypeF.toPlugTypeA(): PlugTypeA {
+    val hasPower = if (this.hasPower == 1) "TRUE" else "FALSE"
+    return object : PlugTypeA {
+        override val hasPower = hasPower
+    }
+}
+
+// 5. Mini USB와 USB-C
+fun UsbMini.toUsbTypeC(): UsbTypeC {
+    val hasPower = this.hasPower == Power.TRUE
+    return object : UsbTypeC {
+        override val hasPower = hasPower
+    }
+}
+
 // 4. 폰, 전원, 충전기 연결하기
 fun main() {
     cellPhone(
         charge(
-            powerOutlet() // 당연히 안됨
-        )
+            powerOutlet().toPlugTypeA()
+        ).toUsbTypeC()
     )
 }
