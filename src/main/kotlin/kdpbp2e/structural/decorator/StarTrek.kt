@@ -14,3 +14,13 @@ open class StarTrekRepository {
         starshipCaptains[starshipName] = captainName
     }
 }
+
+// 일단 상속을 통해 해결 할 수 있다
+// [문제 2]
+// 선장 추가시 이름을 검증하는 새로운 Repository가 필요하게 되었다.
+class LoggingGetCaptainStarTrekRepository: StarTrekRepository() {
+    override fun getCaptain(starshipName: String): String {
+        println("Getting captain for $starshipName")
+        return super.getCaptain(starshipName)
+    }
+}
