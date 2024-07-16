@@ -24,3 +24,15 @@ class LoggingGetCaptainStarTrekRepository: StarTrekRepository() {
         return super.getCaptain(starshipName)
     }
 }
+// StarTrekRepository를 상속 받는 ValidatingAddCaptainStarTrekRepository를 추가하여 해결
+// [문제 3]
+// 이번엔 로그 + 선장 이름 검증 하는 새 Repository가 필요하다
+// 이젠 Repo 이름이 LoggingGetValidatingAddCaptainStarTrekRepository가 되어야 할까?
+class ValidatingAddCaptainStarTrekRepository: StarTrekRepository() {
+    override fun set(starshipName: String, captainName: String) {
+        if (captainName.length > 7) {
+            throw RuntimeException("$captainName name is longer than 7 characters!")
+        }
+        super.set(starshipName, captainName)
+    }
+}
