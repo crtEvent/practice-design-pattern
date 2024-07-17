@@ -4,9 +4,7 @@ package kdpbp2e.behavioral.command
  * 객체의 동작들을 기억해 뒀다가 나중에 실행되도록 하 고 싶다
  * 예제는 Trooper의 이동 명령을 여러개 저장해서 원하는 루트로 이동할 수 있게 한다
  */
-interface Command {
-    fun execute()
-}
+typealias Command = () -> Unit
 
 class Trooper {
     private val orders = mutableListOf<Command>()
@@ -18,7 +16,7 @@ class Trooper {
     fun executeOrders() {
         while (orders.isNotEmpty()) {
             val order = orders.removeFirst()
-            order.execute()
+            order()
         }
     }
 }
