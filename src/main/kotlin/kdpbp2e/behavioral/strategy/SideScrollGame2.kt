@@ -4,16 +4,16 @@ enum class Direction {
     LEFT, RIGHT
 }
 
-interface Weapon {
-    fun shoot(x: Int, y: Int, direction: Direction): Projectile
-}
+object Weapons {
+    fun arrow(x: Int, y: Int, direction: Direction): Projectile {
+        println("화살 공격")
+        return Projectile(x, y, direction)
+    }
 
-class Arrow: Weapon {
-    override fun shoot(x: Int, y: Int, direction: Direction) = Projectile(x, y, direction)
-}
-
-class Javelin: Weapon {
-    override fun shoot(x: Int, y: Int, direction: Direction) = Projectile(x, y, direction)
+    fun javelin(x: Int, y: Int, direction: Direction): Projectile {
+        println("투창 공격")
+        return Projectile(x, y, direction)
+    }
 }
 
 data class Projectile( // 탄환
@@ -26,13 +26,16 @@ class Hero {
     private var direction = Direction.LEFT
     private var x: Int = 42
     private var y: Int = 173
-    private var currentWeapon: Weapon = Arrow()
+    var currentWeapon = Weapons::arrow
 
-    fun shoot(): Projectile {
-        return currentWeapon.shoot(x, y, direction)
+    var shoot = fun() {
+        currentWeapon(x, y, direction)
     }
+}
 
-    fun equip(weapon: Weapon) {
-        currentWeapon = weapon // 전략 패턴: 객체의 동작은 런타임에 변경할 수 있게 하는 것
-    }
+fun main() {
+    val hero = Hero()
+    hero.shoot()
+    hero.currentWeapon = Weapons::javelin
+    hero.shoot()
 }
