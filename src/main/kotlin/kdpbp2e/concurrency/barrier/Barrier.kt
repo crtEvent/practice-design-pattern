@@ -1,9 +1,6 @@
 package kdpbp2e.concurrency.barrier
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.*
 import kotlin.random.Random
 
 /* [Barrier]
@@ -52,5 +49,45 @@ fun CoroutineScope.getPicture(
     delay(500)
     when (characterName) {
         else -> Random.nextBytes(42)
+    }
+}
+
+// -----------------------------------
+
+fun main() {
+    runBlocking {
+        val characters: List<Deferred<FavoriteCharacter>> =
+            listOf(
+                Me.getFavoriteCharacter(),
+                Taylor.getFavoriteCharacter(),
+                Michael.getFavoriteCharacter()
+            )
+
+        println(characters.awaitAll())
+    }
+}
+
+object Michael {
+    suspend fun getFavoriteCharacter() = coroutineScope {
+        async {
+            FavoriteCharacter("Amazon", "Earth's Biggest Selection")
+        }
+    }
+}
+
+object Taylor {
+    suspend fun getFavoriteCharacter() = coroutineScope {
+        async {
+            FavoriteCharacter("Microsoft", "Be What's Next")
+        }
+    }
+}
+
+object Me {
+    suspend fun getFavoriteCharacter() = coroutineScope {
+        async {
+            // I already prepared the answer!
+            FavoriteCharacter("Apple", "Think different")
+        }
     }
 }
