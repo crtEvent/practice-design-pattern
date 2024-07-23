@@ -17,11 +17,15 @@ import kotlin.random.Random
 /**
  * [문제 상황]
  * catchphrase를 수신하기 전까지 picture 데이터를 받아오지 못한다
+ *
+ * [해결]
+ * await()을 생성자에서 호출하면 모든 코루틴을 동시에 시작하게 된다
+ * 모든 코루틴이 완료되길 기다리게 된다
  */
 suspend fun fetchFavoriteCharacter(name: String) = coroutineScope {
-    val catchphrase = getCatchphraseAsync(name).await()
-    val picture = getPicture(name).await()
-    FavoriteCharacter(name, catchphrase, picture)
+    val catchphrase = getCatchphraseAsync(name)
+    val picture = getPicture(name)
+    FavoriteCharacter(name, catchphrase.await(), picture.await())
 }
 
 data class FavoriteCharacter(
