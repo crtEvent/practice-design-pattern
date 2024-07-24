@@ -14,7 +14,9 @@ fun main() {
         val jobs = List(10) {
             async(Dispatchers.Default) {
                 repeat(1000) {
-                    counter++ // ++는 원자적 연산이 아니기 때문에 결과는 10,000보다 작을 것이다
+                    mutex.lock()
+                    counter++ // lock이 걸려 있어 결과는 항상 10,000
+                    mutex.unlock()
                 }
             }
         }
