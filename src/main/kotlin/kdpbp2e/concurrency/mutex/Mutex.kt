@@ -14,9 +14,12 @@ fun main() {
         val jobs = List(10) {
             async(Dispatchers.Default) {
                 repeat(1000) {
-                    mutex.lock()
-                    counter++ // lock이 걸려 있어 결과는 항상 10,000
-                    mutex.unlock()
+                    try {
+                        mutex.lock()
+                        counter++ // 여기서 예외가 발생한다면 try 문으로 감싸야 한다
+                    } finally {
+                        mutex.unlock()
+                    }
                 }
             }
         }
