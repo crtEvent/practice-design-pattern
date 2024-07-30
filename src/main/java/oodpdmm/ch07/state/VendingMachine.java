@@ -12,54 +12,46 @@ package oodpdmm.ch07.state;
  *
  * [요구사항 추가]
  * - 자판기에 제품이 없는 경우 동전을 넣으면 동전을 되돌려 준다가
+ *
+ * [State pattern]
+ * 동일한 기능이 상태에 따라 다르게 동작할 때
+ * 상태를 별도의 타입으로 분리, 각 상태별로 알맞은 하위 타입을 구현한.
+ * 상태 객가 기능을 제공하게 한다
+ * -> 상태가 추가되어도 콘텍스트 코드가 받는 영향이 줄어든다
  */
 
 public class VendingMachine {
-    private enum State { NO_COIN, SELECTABLE, SOLD_OUT }
-    private State state = State.NO_COIN;
+    private MachineState state = new NoCoinState();
     private int coin = 0;
 
     public void insertCoin(int coin) {
-        switch (state) {
-            case NO_COIN -> {
-                increaseCoin(coin);
-                state = State.SELECTABLE;}
-            case SELECTABLE -> {
-                increaseCoin(coin);
-            }
-            case SOLD_OUT -> returnCoin(); // 상태에 대한 요구사항이 추가될 때 마다 조건문 코드가 추가된다
-        }
+        state.insertCoin(coin, this);
     }
 
     public void select(int productId) {
-        switch (state) {
-            case NO_COIN, SOLD_OUT -> {}
-            case SELECTABLE -> {
-                provideProduct(productId);
-                decreaseCoin();
-                if (hasNoCoin()) {
-                    state = State.NO_COIN;
-                }
-            }
-        }
+        state.select(productId, this);
     }
 
-    private void increaseCoin(int coin) {
+    public void changeState(MachineState State) {
+        this.state = state;
+    }
+
+    public void increaseCoin(int coin) {
         this.coin += coin;
     }
 
-    private void decreaseCoin() {
+    public void decreaseCoin() {
         coin--;
     }
 
-    private boolean hasNoCoin() {
+    public boolean hasNoCoin() {
         return coin <= 0;
     }
 
-    private void provideProduct(int productId) {
+    public void provideProduct(int productId) {
     }
 
-    private void returnCoin() {
+    public void returnCoin() {
     }
 
 
