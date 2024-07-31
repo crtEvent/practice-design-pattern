@@ -1,11 +1,8 @@
 package kdpbp2e.concurrency.fanout
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.channels.produce
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 /* [Fan Out]
  * 작업을 여러 동시성 프로세서로 배분하기 위한 패턴

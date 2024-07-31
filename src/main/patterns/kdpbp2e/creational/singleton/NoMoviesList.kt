@@ -38,14 +38,6 @@ object NoMoviesList: List<String> {
         return emptyList()
     }
 
-    override fun toArray(): Array<Any> {
-        TODO("Not yet implemented")
-    }
-
-    override fun <T : Any?> toArray(a: Array<out T>): Array<T> {
-        TODO("Not yet implemented")
-    }
-
     override fun lastIndexOf(element: String): Int = -1
 
     override fun indexOf(element: String): Int = -1
